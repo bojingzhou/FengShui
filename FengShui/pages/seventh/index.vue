@@ -12,8 +12,18 @@
 			</view>
 			<uni-tag text="发送" size="small" type="primary" @tap="send"></uni-tag>
 		</view>
-		<view class="list">
-			<view class="item" v-for="(item,index) in list" v-bind:key="index">{{item}}</view>
+		<view>
+			<!-- <view class="uni-padding-wrap uni-common-mt"> -->
+			<!-- <view> -->
+			<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower"
+			 @scroll="scroll">
+				<view class="scroll-view-item" v-for="(value,key) in list" v-bind:key="key">{{value}}</view>
+			</scroll-view>
+			<!-- </view> -->
+			<!-- <view @tap="goTop" class="uni-link uni-center uni-common-mt">
+					点击这里返回顶部
+				view></ -->
+			<!-- </view> -->
 		</view>
 
 
@@ -36,7 +46,12 @@
 				changeValue: '',
 				showPassword: true,
 				src: '../../../static/eye-1.png',
-				list: [1, 2, 3]
+				i: 0,
+				list: [1, 2, 3],
+				scrollTop: 0,
+				old: {
+					scrollTop: 0
+				}
 			}
 		},
 		methods: {
@@ -53,9 +68,41 @@
 				this.showClearIcon = false;
 			},
 			send: function() {
-				let i = 0;
-				i += 1;
-				this.list.push(i)
+				var that = this;
+				this.list.push(this.i += 1);
+				let height = 0;
+				var query = wx.createSelectorQuery();
+				this.$nextTick(function() {
+					query.select('.scroll-Y').boundingClientRect()
+					query.select('.scroll-Y .uni-scroll-view .uni-scroll-view>div').boundingClientRect()
+					query.exec(function(rect) {
+						let heigt = rect[0].height;
+						let all_heigt = rect[1].height;
+						that.scrollTop = all_heigt - height;
+						// console.log(that.scrollTop)
+					});
+				})
+
+			},
+			upper: function(e) {
+				console.log(e)
+			},
+			lower: function(e) {
+				console.log(e)
+			},
+			scroll: function(e) {
+				console.log(e)
+				this.old.scrollTop = e.detail.scrollTop
+			},
+			goTop: function(e) {
+				this.scrollTop = this.old.scrollTop
+				this.$nextTick(function() {
+					this.scrollTop = 0
+				});
+				uni.showToast({
+					icon: "none",
+					title: "纵向滚动 scrollTop 值已被修改为 0"
+				})
 			}
 		}
 	}
@@ -71,6 +118,7 @@
 		width: 88%;
 	}
 
+
 	.box {
 		width: 100%;
 		box-sizing: border-box;
@@ -79,23 +127,13 @@
 		bottom: 110upx;
 	}
 
-	.list {
-		display: flex;
-		flex-direction: column;
-		position: fixed;
-		height: -webkit-calc(100% - 300upx);
-		overflow-y: auto;
-		box-sizing: border-box;
-		padding: 20upx 30upx;
+	.scroll-view-item {
+		/* height: 200upx; */
 	}
 
-	.item {
-		margin: 20upx ;
-		padding: 10upx 20upx;
-		border-radius: 10upx;
-		background-color: #ccc;
-		color: #000;
-		display: inline-block;
-		width: 100upx;
+	.scroll-Y {
+		/* height: 500upx; */
+		position: fixed;
+		height: calc(100% - 300upx);
 	}
 </style>
