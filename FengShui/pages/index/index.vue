@@ -30,34 +30,45 @@
 				<view class="uni-card-content image-view">
 					<image src="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg" class="image"></image>
 				</view>
-				<view class="uni-form-item uni-column">
-					<view class="with-fun">
-						<input class="uni-input" placeholder="请输入您的姓名" :value="inputClearValue" @input="clearInput" />
-						<view class="uni-icon uni-icon-clear" v-if="showClearIcon" @click="clearIcon"></view>
+				<view class="flex-left line">
+					<uni-tag text="姓名" size="small" type="warning"></uni-tag>
+					<view class="uni-form-item uni-column">
+						<view class="with-fun">
+							<input class="uni-input" placeholder="请输入您的姓名" :value="inputClearValue" @input="clearInput" />
+							<view class="uni-icon uni-icon-clear" v-if="showClearIcon" @click="clearIcon"></view>
+						</view>
 					</view>
 				</view>
-				<view class="uni-list">
-					<radio-group @change="radioChange" class="flex-left">
-						<label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in items" :key="item.value">
-							<view>
-								<radio :value="item.value" :checked="index === current" />
+				<view class="flex-left line">
+					<uni-tag text="性别" size="small" type="primary"></uni-tag>
+					<view class="uni-list">
+						<radio-group @change="radioChange" class="flex-left">
+							<label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in items" :key="item.value">
+								<view>
+									<radio :value="item.value" :checked="index === current" />
+								</view>
+								<view>{{item.name}}</view>
+							</label>
+						</radio-group>
+					</view>
+				</view>
+				<view class="flex-left line">
+					<uni-tag text="生日" size="small" type="success"></uni-tag>
+					<view class="uni-list">
+						<view class="uni-list-cell">
+							<!-- <view class="uni-list-cell-left">
+								出生选择
+							</view> -->
+							<view class="uni-list-cell-db">
+								<picker mode="date" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
+									<view class="uni-input">{{date}}</view>
+								</picker>
 							</view>
-							<view>{{item.name}}</view>
-						</label>
-					</radio-group>
-				</view>
-				<view class="uni-list">
-					<view class="uni-list-cell">
-						<view class="uni-list-cell-left">
-							出生选择
-						</view>
-						<view class="uni-list-cell-db">
-							<picker mode="date" :value="date" :start="startDate" :end="endDate" @change="bindDateChange">
-								<view class="uni-input">{{date}}</view>
-							</picker>
 						</view>
 					</view>
 				</view>
+
+
 				<view class="uni-card-footer">
 					<view class="uni-card-link">清空</view>
 					<view class="uni-card-link">提交</view>
@@ -114,9 +125,9 @@
 		data() {
 			const currentDate = this.getDate({
 				format: true
-			});	
+			});
 			return {
-			
+
 				showClearIcon: false,
 				inputClearValue: '',
 				zd_flag: false,
@@ -216,11 +227,11 @@
 			},
 			getDate(type) {
 				const date = new Date();
-			
+
 				let year = date.getFullYear();
 				let month = date.getMonth() + 1;
 				let day = date.getDate();
-			
+
 				if (type === 'start') {
 					year = year - 60;
 				} else if (type === 'end') {
@@ -228,15 +239,15 @@
 				}
 				month = month > 9 ? month : '0' + month;;
 				day = day > 9 ? day : '0' + day;
-			
+
 				return `${year}-${month}-${day}`;
 			},
-			detail:function(){
+			detail: function() {
 				uni.navigateTo({
 					url: '/pages/fifth/index?type=0'
 				});
 			}
-			
+
 		}
 	}
 </script>
@@ -300,7 +311,20 @@
 	.uni-list-cell {
 		justify-content: flex-start
 	}
-	.uni-list::before,.uni-list-cell::after{
+
+	.uni-list::before,
+	.uni-list-cell::after {
+		background-color: #fff;
+	}
+
+	.line {
+		box-sizing: border-box;
+		padding: 0 20upx;
+	}
+	.uni-form-item,.uni-list{
+		width: 86%;
+	}
+	.uni-list:after{
 		background-color: #fff;
 	}
 </style>

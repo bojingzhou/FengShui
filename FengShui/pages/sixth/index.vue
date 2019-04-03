@@ -35,7 +35,7 @@
 		<view class="fix" v-if="hideFlag" @tap="hide"></view>
 		<view class="fix-con" v-if="hideFlag" style="display: flex;flex-direction: column;justify-content: center;">
 			<view class="item" v-if="createFlag">
-				<uni-tag size="small" text="账户名" type="success" style="margin-left: 120upx;"></uni-tag><br />
+				<uni-tag size="small" text="账户" type="success" style="margin-left: 120upx;"></uni-tag><br />
 				<input type="text" placeholder="输入您的账户名" style="text-align: center;">
 
 			</view>
