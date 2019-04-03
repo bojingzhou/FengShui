@@ -35,6 +35,12 @@
 			"style": {
 				"navigationBarTitleText": "登陆"
 			}
+		},
+		{
+			"path": "pages/seventh/index",
+			"style": {
+				"navigationBarTitleText": "交流"
+			}
 		}
 	],
 	"globalStyle": {
@@ -59,6 +65,12 @@
 				"iconPath": "static/api.png",
 				"selectedIconPath": "static/apiHL.png",
 				"text": "许愿墙"
+			},
+			{
+				"pagePath": "pages/seventh/index",
+				"iconPath": "static/template.png",
+				"selectedIconPath": "static/templateHL.png",
+				"text": "交流"
 			},
 			{
 				"pagePath": "pages/third/index",

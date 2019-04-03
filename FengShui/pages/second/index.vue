@@ -11,9 +11,12 @@
 					<view class="uni-media-list-body">
 						<view class="uni-media-list-text-top flex-between">
 
-							<view>{{value.title}}</view>
+							<view class="flex-left">
+								<view>{{value.title}}</view>
+								<uni-tag text="赞" type="warning" size="small" style="margin-left: 10upx;"></uni-tag>
+							</view>
 							<view style="margin-right: 30upx;">
-								<uni-badge v-bind:text="value.num" v-bind:type="key%2==0?'warning':'danger'"></uni-badge>
+								<uni-badge v-bind:text="value.num" v-bind:type="key%2==0?'success':'danger'"></uni-badge>
 
 							</view>
 
