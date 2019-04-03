@@ -12,10 +12,20 @@
 			</view>
 			<uni-tag text="发送" size="small" type="primary" @tap="send"></uni-tag>
 		</view>
-		<view class="list">
-			<view class="item" v-for="(item,index) in list" v-bind:key="index">{{item}}</view>
-		</view>
-
+		<!-- <view class="list">
+			<view class="item-box" id="item-box">
+				<view class="item flex-left" v-for="(item,index) in list" v-bind:key="index">
+					<view>nickname:</view>
+					<view>{{item}}</view>
+				</view>
+			</view>
+		</view> -->
+		<scroll-view scroll-y="true" style="height: 200px;" scroll-top="{scrollTop}">
+			<view id="green" class="scroll-view-item bc_green"></view>
+			<view id="red" class="scroll-view-item bc_red"></view>
+			<view id="yellow" class="scroll-view-item bc_yellow"></view>
+			<view id="blue" class="scroll-view-item bc_blue"></view>
+		</scroll-view>
 
 	</view>
 </template>
@@ -36,10 +46,13 @@
 				changeValue: '',
 				showPassword: true,
 				src: '../../../static/eye-1.png',
-				list: [1, 2, 3]
+				list: [],
+				i: 0,
+				scrollTop: 200
 			}
 		},
 		methods: {
+
 			clearInput: function(event) {
 				this.inputClearValue = event.target.value;
 				if (event.target.value.length > 0) {
@@ -53,9 +66,21 @@
 				this.showClearIcon = false;
 			},
 			send: function() {
-				let i = 0;
-				i += 1;
-				this.list.push(i)
+				// 				this.i += 1;
+				// 				this.list.unshift(this.i)
+				// 				
+				// 				this.$nextTick(function() {
+				// 					var query = wx.createSelectorQuery();
+				// 					query.select('#item-box').boundingClientRect()
+				// 					query.exec(function(res) {
+				// 						//console.log(res);  
+				// 						console.log(res);
+				// 					})
+				// 
+				// 				})
+				console.log(this.scrollTop)
+				this.scrollTop=400
+
 			}
 		}
 	}
@@ -80,8 +105,8 @@
 	}
 
 	.list {
-		display: flex;
-		flex-direction: column;
+		/* display: flex;
+		flex-direction: column; */
 		position: fixed;
 		height: -webkit-calc(100% - 300upx);
 		overflow-y: auto;
@@ -90,12 +115,24 @@
 	}
 
 	.item {
-		margin: 20upx ;
 		padding: 10upx 20upx;
+		margin: 20upx;
 		border-radius: 10upx;
 		background-color: #ccc;
 		color: #000;
-		display: inline-block;
-		width: 100upx;
+	}
+
+	.item-box {}
+
+
+	.item>view:last-child {
+		margin-left: 10upx;
+
+	}
+
+
+	.scroll-view-item {
+		height: 400upx;
+		background-color: #ccc;
 	}
 </style>
