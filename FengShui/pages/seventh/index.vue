@@ -4,7 +4,8 @@
 			<view class="uni-common-mt">
 				<view class="uni-form-item uni-column">
 					<view class="with-fun">
-						<input placeholder-style="color:#F76260" class="uni-input" placeholder="输入内容" :value="inputClearValue" @input="clearInput" />
+						<input v-model="con" placeholder-style="color:#F76260" class="uni-input" placeholder="输入内容" :value="inputClearValue"
+						 @input="clearInput" />
 						<view class="uni-icon uni-icon-clear" v-if="showClearIcon" @click="clearIcon"></view>
 					</view>
 				</view>
@@ -28,9 +29,7 @@
 		},
 		data() {
 			return {
-				title: 'input',
-				focus: false,
-				inputValue: '',
+				con: 'input',
 				showClearIcon: false,
 				inputClearValue: '',
 				changeValue: '',
@@ -47,6 +46,7 @@
 		},
 		onShow() {
 			this.connect();
+
 		},
 		methods: {
 
@@ -63,16 +63,38 @@
 				this.showClearIcon = false;
 			},
 			connect: function() {
+				let that = this;
 				this.socket = io('http://localhost/');
-				this.socket.on('connect', () => {
-					console.log('学习')
-				})
-				this.socket.on('message', (result) => {
+				this.socket.on('msg', (result) => {
+					that.list.push(result.send);
+					let height = 0;
+					var query = wx.createSelectorQuery();
+					this.$nextTick(function() {
+						query.select('.scroll-Y').boundingClientRect()
+						query.select('.scroll-Y .uni-scroll-view .uni-scroll-view>div').boundingClientRect()
+						query.exec(function(rect) {
+							let heigt = rect[0].height;
+							let all_heigt = rect[1].height;
+							that.scrollTop = all_heigt - height;
+						});
+					})
 					console.log(result)
 				})
+
+
+
+				// 				this.socket.on('connect', () => {
+				// 					// console.log('学习')
+				// 				})
+				// 				this.socket.on('message', (result) => {
+				// 					// console.log(result)
+				// 				})
+
 			},
 			send: function() {
-
+				this.socket.emit('send', {
+					"send": this.con
+				})
 
 
 				// 				var that = this;
