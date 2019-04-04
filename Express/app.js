@@ -8,8 +8,10 @@ var cors = require('cors');
 var indexRouter = require('./routes/index');
 var bannerRouter = require('./routes/banner');
 var listRouter = require('./routes/list');
+var interfaceRouter = require('./routes/interface');
 
 var app = express();
+var router = express.Router();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -23,6 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+// router.use("/",interfaceRouter)
 // app.use('/index', indexRouter);
 app.use('/banner', bannerRouter);
 app.use('/list', listRouter);
