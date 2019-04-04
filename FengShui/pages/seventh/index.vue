@@ -138,5 +138,7 @@
 		/* height: 500upx; */
 		position: fixed;
 		height: calc(100% - 300upx);
+		box-sizing: border-box;
+		padding: 20upx;
 	}
 </style>
