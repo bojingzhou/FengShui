@@ -82,23 +82,23 @@
 				</view>
 				<view class="zuqian-box">
 					<view style="text-align: center;font-weight: bold;" class="flex-center">
-						<view>竹签摇一摇</view>
+						<view>竹签卜运势</view>
 						<uni-tag text="势" size="small" type="danger" style="margin-left: 20upx;"></uni-tag>
 					</view>
 					<view class="flex-left zuqian">
-						<view class="flex-y-center">
+						<view class="flex-y-center" @tap=chouQian(0)>
 							<img src="../../static/api.png" alt="">
 							<uni-tag text="观音" size="small" type="warning"></uni-tag>
 						</view>
-						<view class="flex-y-center">
+						<view class="flex-y-center" @tap=chouQian(1)>
 							<img src="../../static/api.png" alt="">
 							<uni-tag text="关帝" size="small" type="primary"></uni-tag>
 						</view>
-						<view class="flex-y-center">
+						<view class="flex-y-center" @tap=chouQian(2)>
 							<img src="../../static/api.png" alt="">
-							<uni-tag text="月老" size="small" type="error"></uni-tag>
+							<uni-tag text="月老" size="small" type="danger"></uni-tag>
 						</view>
-						<view class="flex-y-center">
+						<view class="flex-y-center" @tap=chouQian(3)>
 							<img src="../../static/api.png" alt="">
 							<uni-tag text="黄大仙" size="small" type="success"></uni-tag>
 						</view>
@@ -111,8 +111,13 @@
 			</view>
 		</view>
 
-
-		<view style="height:80upx;"></view>
+		<view class="fix" @tap="hideFix" v-if="fixFlag" :class="color"></view>
+		<view class="fix-con" v-if="conFlag">
+			<view class="flex-center cq-src">
+				<img :src="cqSrc" alt="">
+			</view>
+			<view>{{randNum}}</view>
+		</view>
 	</view>
 </template>
 
@@ -144,15 +149,21 @@
 				],
 				current: 0,
 				date: currentDate,
+				color: null,
+				fixFlag: false,
+				conFlag: false,
+				randNum: 0,
+				cqTip: null,
+				cqSrc: null
 
 			}
 		},
 		onHide() {
-			this.stopjiasu()
+			// this.stopjiasu()
 		},
 		onShow() {
-			this.startjiasu();
-			this.jianting();
+			// this.startjiasu();
+			// this.jianting();
 		},
 		onLoad() {
 
@@ -246,6 +257,45 @@
 				uni.navigateTo({
 					url: '/pages/fifth/index?type=0'
 				});
+			},
+			chouQian: function(type) {
+				this.fixFlag = true
+				this.conFlag = true;
+				let num = parseInt(Math.random() * 100)
+				this.randNum = num;
+				console.log(num)
+				if (type == 0) {
+					this.color = "yellow"
+					this.cqSrc = "../../static/api.png"
+					// this.cqColor = "cqBlue"
+					// this.cqTip = "观音签"
+				} else if (type == 1) {
+					this.color = "blue"
+					this.cqSrc = "../../static/api.png"
+
+					// this.cqColor = "cqYellow"
+
+					// this.cqTip = "关帝签"
+
+				} else if (type == 2) {
+					this.cqTip = "月老签"
+					this.cqSrc = "../../static/api.png"
+
+					// this.cqColor = "cqGreen"
+
+					this.color = "grey"
+				} else if (type == 3) {
+					this.cqTip = "黄大仙签"
+					this.cqSrc = "../../static/api.png"
+
+					// this.cqColor = "cqGrey"
+
+					this.color = "green"
+				}
+			},
+			hideFix: function() {
+				this.fixFlag = false
+				this.conFlag = false;
 			}
 
 		}
@@ -321,10 +371,83 @@
 		box-sizing: border-box;
 		padding: 0 20upx;
 	}
-	.uni-form-item,.uni-list{
+
+	.uni-form-item,
+	.uni-list {
 		width: 86%;
 	}
-	.uni-list:after{
+
+	.uni-list:after {
 		background-color: #fff;
+	}
+
+	.fix {
+		z-index: 400;
+		position: fixed;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.yellow {
+		/* display: block; */
+
+		background-color: #f0ad4e;
+	}
+
+	.cqYellow {
+		color: #f0ad4e
+	}
+
+	.blue {
+		/* display: block; */
+
+		background-color: #007aff;
+	}
+
+	.cqBlue {
+		color: #007aff
+	}
+
+	.grey {
+		/* display: block; */
+
+		background-color: #dd524d;
+	}
+
+	.cqGrey {
+		color: #dd524d
+	}
+
+	.green {
+		/* display: block; */
+
+		background-color: #4cd964;
+	}
+
+	.cqGreen {
+		color: #4cd964
+	}
+
+	.fix-con {
+		z-index: 401;
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		margin-left: -250upx;
+		margin-top: -460upx;
+		width: 500upx;
+		height: 920upx;
+		background-color: #fff;
+		border-radius: 20upx;
+		box-sizing: border-box;
+		padding: 20upx;
+	}
+
+	.cq-tip {
+		text-align: center;
+		font-weight: bold;
+		font-size: 40upx;
 	}
 </style>
