@@ -11,11 +11,16 @@ var https = require('https');
 var path = require('path');
 var config = require('../config/config')
 var fs = require('fs');
-if (config.USE_HTTPS)
-{
+if (config.USE_HTTPS) {
+    let url = path.resolve(__dirname, "../https")
+    console.log(url)
+
     const httpsOption = {
-        key: fs.readFileSync(config.HTTPS_KEY_PATH),
-        cert: fs.readFileSync(config.HTTPS_PEM_PATH)
+        // key: fs.readFileSync(config.HTTPS_KEY_PATH),
+        // cert: fs.readFileSync(config.HTTPS_PEM_PATH)
+        key: fs.readFileSync(path.resolve(url, "1540809615615.key")),
+        cert: fs.readFileSync(path.resolve(url, "1540809615615.pem"))
+
     }
     var server = https.createServer(httpsOption, app).listen(443);
     server.on('error', onError);
@@ -41,24 +46,32 @@ var server = http.createServer(app);
  */
 
 server.listen(port);
-
+var io = require('socket.io')(server);
+io.sockets.on('connection', function (socket) {
+    socket.on('login', function (data) {
+        io.sockets.emit("tip", data)
+    });
+    socket.on('disconnect', function (socket) {
+        console.log("hide")
+    });
+    socket.on('send', function (data) {
+        io.sockets.emit("msg", data)
+    });
+});
 
 /**
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val)
-{
+function normalizePort(val) {
     var port = parseInt(val, 10);
 
-    if (isNaN(port))
-    {
+    if (isNaN(port)) {
         // named pipe
         return val;
     }
 
-    if (port >= 0)
-    {
+    if (port >= 0) {
         // port number
         return port;
     }
@@ -70,10 +83,8 @@ function normalizePort(val)
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error)
-{
-    if (error.syscall !== 'listen')
-    {
+function onError(error) {
+    if (error.syscall !== 'listen') {
         throw error;
     }
 
@@ -82,8 +93,7 @@ function onError(error)
         : 'Port ' + port;
 
     // handle specific listen errors with friendly messages
-    switch (error.code)
-    {
+    switch (error.code) {
         case 'EACCES':
             console.error(bind + ' requires elevated privileges');
             process.exit(1);
@@ -101,8 +111,7 @@ function onError(error)
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening()
-{
+function onListening() {
     var addr = server.address();
     var bind = typeof addr === 'string'
         ? 'pipe ' + addr

@@ -12,6 +12,7 @@
 			</view>
 			<uni-tag text="发送" size="small" type="primary" @tap="send"></uni-tag>
 		</view>
+		<view class="flex-center" :class="nickNameFlag?'nickOn':''">{{nickName}}</view>
 		<view>
 			<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower"
 			 @scroll="scroll">
@@ -41,11 +42,16 @@
 				old: {
 					scrollTop: 0
 				},
-				socket: null
+				socket: null,
+				nickNameFlag: false,
+				nickName: null
 			}
 		},
-		onShow() {
+		onLoad() {
 			this.connect();
+
+		},
+		onShow() {
 
 		},
 		methods: {
@@ -65,6 +71,14 @@
 			connect: function() {
 				let that = this;
 				this.socket = io('http://localhost/');
+				this.socket.emit("login", {
+					nickname: "zjb"
+				})
+				this.socket.on('tip', function(result) {
+					that.nickName = result.nickname;
+					that.nickNameFlag = true;
+
+				})
 				this.socket.on('msg', (result) => {
 					that.list.push(result.send);
 					let height = 0;
@@ -80,56 +94,10 @@
 					})
 					console.log(result)
 				})
-
-
-
-				// 				this.socket.on('connect', () => {
-				// 					// console.log('学习')
-				// 				})
-				// 				this.socket.on('message', (result) => {
-				// 					// console.log(result)
-				// 				})
-
 			},
 			send: function() {
 				this.socket.emit('send', {
 					"send": this.con
-				})
-
-
-				// 				var that = this;
-				// 				this.list.push(this.i += 1);
-				// 				let height = 0;
-				// 				var query = wx.createSelectorQuery();
-				// 				this.$nextTick(function() {
-				// 					query.select('.scroll-Y').boundingClientRect()
-				// 					query.select('.scroll-Y .uni-scroll-view .uni-scroll-view>div').boundingClientRect()
-				// 					query.exec(function(rect) {
-				// 						let heigt = rect[0].height;
-				// 						let all_heigt = rect[1].height;
-				// 						that.scrollTop = all_heigt - height;
-				// 					});
-				// 				})
-
-			},
-			upper: function(e) {
-				console.log(e)
-			},
-			lower: function(e) {
-				console.log(e)
-			},
-			scroll: function(e) {
-				console.log(e)
-				this.old.scrollTop = e.detail.scrollTop
-			},
-			goTop: function(e) {
-				this.scrollTop = this.old.scrollTop
-				this.$nextTick(function() {
-					this.scrollTop = 0
-				});
-				uni.showToast({
-					icon: "none",
-					title: "纵向滚动 scrollTop 值已被修改为 0"
 				})
 			}
 		}
@@ -165,5 +133,36 @@
 		height: calc(100% - 300upx);
 		box-sizing: border-box;
 		padding: 20upx;
+	}
+
+	.nickOn:before {
+		content: "欢迎:";
+	}
+
+	.nickOn:after {
+		content: "加入!";
+	}
+
+	.nickOn {
+		position: fixed;
+		width: 100%;
+		top: 100upx;
+		left: 0;
+		z-index: 100;
+		text-align: center;
+		-webkit-animation: mymove 5s;
+		opacity: 0;
+	}
+
+	@-webkit-keyframes mymove
+
+		{
+		from {
+			opacity: 1;
+		}
+
+		to {
+			opacity: 0;
+		}
 	}
 </style>

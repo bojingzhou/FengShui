@@ -8,7 +8,7 @@ var cors = require('cors');
 var indexRouter = require('./routes/index');
 var bannerRouter = require('./routes/banner');
 var listRouter = require('./routes/list');
-var interfaceRouter = require('./routes/interface');
+// var interfaceRouter = require('./routes/interface');
 
 var app = express();
 var router = express.Router();
