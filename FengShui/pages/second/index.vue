@@ -13,7 +13,7 @@
 
 							<view class="flex-left">
 								<view>{{value.title}}</view>
-								<uni-tag text="赞" type="warning" size="small" style="margin-left: 10upx;"></uni-tag>
+								<!-- <uni-tag text="赞" type="warning" size="small" style="margin-left: 10upx;"></uni-tag> -->
 							</view>
 							<view style="margin-right: 30upx;">
 								<uni-badge v-bind:text="value.num" v-bind:type="key%2==0?'success':'danger'"></uni-badge>
@@ -26,16 +26,20 @@
 				</view>
 			</view>
 		</view>
-		<view class="flex-center btn-box" v-if="btnFlag">
-			<view>{{num}}</view>
-			<view class="tag-view" @tap="btnTap(0)">
-				<uni-tag text="最新" type="danger"></uni-tag>
-			</view>
-			<view class="tag-view" @tap="btnTap(1)">
-				<uni-tag text="前十" type="warning"></uni-tag>
-			</view>
-			<view class="tag-view" @tap="btnTap(2)">
-				<uni-tag text="祈愿" type="success"></uni-tag>
+		<view class="btn-box" v-if="btnFlag">
+			<view style="display: flex;height:100%;flex-direction:  column; justify-content: center;">
+				<view style="text-align: center;font-weight: bold;">{{num}}</view>
+				<view style="display: flex;flex-direction: column;">
+					<view class="tag-view" @tap="btnTap(0)">
+						<uni-tag text="最新" type="danger"></uni-tag>
+					</view>
+					<view class="tag-view" @tap="btnTap(1)">
+						<uni-tag text="前十" type="warning"></uni-tag>
+					</view>
+					<view class="tag-view" @tap="btnTap(2)">
+						<uni-tag text="祈愿" type="success"></uni-tag>
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -195,9 +199,10 @@
 		/* display: none; */
 		position: fixed;
 		z-index: 10000;
-		width: 100%;
+		/* width: 100%; */
 		left: 0;
-		bottom: 100upx;
+		bottom: 0;
+		height: 100%;
 		background-color: rgba(255, 255, 255, .3);
 	}
 

@@ -86,12 +86,12 @@
 						"type": "danger"
 					}
 				],
-				key: "usrid"
+				key: "usrname"
 			}
 		},
 		methods: {
 			itemTap: function(num) {
-				console.log(num);
+				// console.log(num);
 			},
 			getStorage: function() {
 				var key = this.key;

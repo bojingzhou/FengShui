@@ -49,13 +49,16 @@ server.listen(port);
 var io = require('socket.io')(server);
 io.sockets.on('connection', function (socket) {
     socket.on('login', function (data) {
-        io.sockets.emit("tip", data)
+        // console.log(data);
+        let result = JSON.parse(data);
+        io.sockets.emit("tip", JSON.stringify(result))
     });
     socket.on('disconnect', function (socket) {
         console.log("hide")
     });
     socket.on('send', function (data) {
-        io.sockets.emit("msg", data)
+        let result = JSON.parse(data);
+        io.sockets.emit("msg", JSON.stringify(result))
     });
 });
 

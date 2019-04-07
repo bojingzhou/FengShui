@@ -66,12 +66,12 @@
 				"selectedIconPath": "static/apiHL.png",
 				"text": "许愿墙"
 			},
-			{
-				"pagePath": "pages/seventh/index",
-				"iconPath": "static/template.png",
-				"selectedIconPath": "static/templateHL.png",
-				"text": "交流"
-			},
+// 			{
+// 				"pagePath": "pages/seventh/index",
+// 				"iconPath": "static/template.png",
+// 				"selectedIconPath": "static/templateHL.png",
+// 				"text": "交流"
+// 			},
 			{
 				"pagePath": "pages/third/index",
 				"iconPath": "static/template.png",

@@ -36,7 +36,7 @@
 
 		},
 		onLoad(option){
-			console.log(option.type)
+			// console.log(option.type)
 		}
 	}
 </script>

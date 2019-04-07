@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="flex-between box">
-			<view class="uni-common-mt">
+			<view class="uni-common-mt" style="background-color: #ccc;">
 				<view class="uni-form-item uni-column">
 					<view class="with-fun">
 						<input v-model="con" placeholder-style="color:#F76260" class="uni-input" placeholder="输入内容" :value="inputClearValue"
@@ -10,7 +10,8 @@
 					</view>
 				</view>
 			</view>
-			<uni-tag text="发送" size="small" type="primary" @tap="send"></uni-tag>
+			<view>发送</view>
+			<!-- <uni-tag text="发送" size="small" type="primary" @tap="send"></uni-tag> -->
 		</view>
 		<view class="flex-center" :class="nickNameFlag?'nickOn':''">{{nickName}}</view>
 		<view>
@@ -23,7 +24,7 @@
 </template>
 <script>
 	import uniTag from '@/components/uni-tag.vue'
-	const io = require('../../common/weapp.socket.io.js')
+	import config from '@/common/config.js'
 	export default {
 		components: {
 			uniTag
@@ -69,36 +70,10 @@
 				this.showClearIcon = false;
 			},
 			connect: function() {
-				let that = this;
-				this.socket = io('http://localhost/');
-				this.socket.emit("login", {
-					nickname: "zjb"
-				})
-				this.socket.on('tip', function(result) {
-					that.nickName = result.nickname;
-					that.nickNameFlag = true;
-
-				})
-				this.socket.on('msg', (result) => {
-					that.list.push(result.send);
-					let height = 0;
-					var query = wx.createSelectorQuery();
-					this.$nextTick(function() {
-						query.select('.scroll-Y').boundingClientRect()
-						query.select('.scroll-Y .uni-scroll-view .uni-scroll-view>div').boundingClientRect()
-						query.exec(function(rect) {
-							let heigt = rect[0].height;
-							let all_heigt = rect[1].height;
-							that.scrollTop = all_heigt - height;
-						});
-					})
-					console.log(result)
-				})
+				
 			},
 			send: function() {
-				this.socket.emit('send', {
-					"send": this.con
-				})
+
 			}
 		}
 	}
@@ -120,7 +95,7 @@
 		box-sizing: border-box;
 		padding: 0 20upx;
 		position: fixed;
-		bottom: 110upx;
+		bottom: 0;
 	}
 
 	.scroll-view-item {
@@ -130,7 +105,7 @@
 	.scroll-Y {
 		/* height: 500upx; */
 		position: fixed;
-		height: calc(100% - 300upx);
+		height: -webkit-calc(100% - 300upx);
 		box-sizing: border-box;
 		padding: 20upx;
 	}
@@ -154,9 +129,7 @@
 		opacity: 0;
 	}
 
-	@-webkit-keyframes mymove
-
-		{
+	@-webkit-keyframes mymove {
 		from {
 			opacity: 1;
 		}

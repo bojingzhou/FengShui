@@ -1,5 +1,6 @@
 <template>
-	<view>
+	<view style="display: flex;flex-direction: column;justify-content: center;position: fixed;
+	width: 100%;height: 100%;left: 0;top: 0;">
 		<view class="uni-common-mt">
 			<view class="uni-list">
 				<view class="uni-list-cell">
@@ -7,15 +8,18 @@
 						<view class="uni-label">用户名</view>
 					</view>
 					<view class="uni-list-cell-db">
-						<input class="uni-input" type="text" placeholder="请输入用户名" name="key" :value="key" @input="keyChange"></input>
+						<input class="uni-input" v-model="username" type="text" placeholder="请输入用户名" name="key"
+						 :value="key"></input>
 					</view>
+					{{username}}
 				</view>
 				<view class="uni-list-cell">
 					<view class="uni-list-cell-left">
 						<view class="uni-label">密码</view>
 					</view>
 					<view class="uni-list-cell-db">
-						<input class="uni-input" type="password" placeholder="请输入密码" name="data" :value="data" @input="dataChange"></input>
+						<input class="uni-input" type="password"  v-model="password" placeholder="请输入密码" name="data"
+						 :value="data"></input>
 					</view>
 				</view>
 			</view>
@@ -26,32 +30,35 @@
 					<uni-tag size="small" text="回首页" type="warning"></uni-tag>
 				</view>
 			</view>
-			<view class="uni-padding-wrap">
+			<view class="uni-padding-wrap" v-if="btnFlag">
 				<view class="uni-btn-v">
-					<button type="primary" class="btn-setstorage" @tap="setStorage">登陆</button>
+					<button type="primary" class="btn-setstorage" @tap="login">登陆</button>
 				</view>
 			</view>
 		</view>
 		<view class="fix" v-if="hideFlag" @tap="hide"></view>
 		<view class="fix-con" v-if="hideFlag" style="display: flex;flex-direction: column;justify-content: center;">
-			<view class="item" v-if="createFlag">
-				<uni-tag size="small" text="账户" type="success" style="margin-left: 120upx;"></uni-tag><br />
-				<input type="text" placeholder="输入您的账户名" style="text-align: center;">
+			<view v-if="createFlag" style="text-align: center;font-weight: bold;">创建账户</view>
+			<view class="item flex-center" v-if="createFlag">
+				<uni-tag size="small" text="账户" type="success"></uni-tag>
+				<input type="text" placeholder="输入您的账户名" style="margin-left: 30upx;">
 
 			</view>
-			<view class="item" v-if="createFlag">
+			<view class="item flex-center" v-if="createFlag">
 
-				<uni-tag size="small" text="密码" type="warning" style="margin-left: 120upx;"></uni-tag>
-				<input type="text" placeholder="输入您的密码" style="text-align: center;">
+				<uni-tag size="small" text="密码" type="warning"></uni-tag>
+				<input type="text" placeholder="输入您的密码" style="margin-left: 30upx;">
 			</view>
-			<view class="item" v-if="createFlag">
+			<view class="item flex-center" v-if="createFlag">
 
-				<uni-tag size="small" text="邮箱" type="primary" style="margin-left: 120upx;"></uni-tag>
-				<input type="text" placeholder="输入您的邮箱" style="text-align: center;">
+				<uni-tag size="small" text="邮箱" type="primary"></uni-tag>
+				<input type="text" placeholder="输入您的邮箱" style="margin-left: 30upx;">
 			</view>
-			<view class="item" v-if="forgetFlag">
-				<uni-tag size="small" text="邮箱" type="danger" style="margin-left: 120upx;"></uni-tag>
-				<input type="text" placeholder="输入您的邮箱" style="text-align: center;">
+			<view v-if="forgetFlag" style="text-align: center;font-weight: bold;">忘记密码</view>
+
+			<view class="item flex-center" v-if="forgetFlag">
+				<uni-tag size="small" text="邮箱" type="danger"></uni-tag>
+				<input type="text" placeholder="输入您的邮箱" style="margin-left: 30upx;">
 			</view>
 
 			<view class="flex-center btn-box">
@@ -63,7 +70,7 @@
 </template>
 <script>
 	import uniTag from '@/components/uni-tag.vue'
-
+	import config from '@/common/config.js'
 	export default {
 		components: {
 			uniTag,
@@ -76,10 +83,34 @@
 				data: '',
 				hideFlag: false,
 				createFlag: false,
-				forgetFlag: false
+				forgetFlag: false,
+				username: "",
+				password: "",
+				btnFlag: false,
+				status: false
+			}
+		},
+		onShow() {
+
+		},
+		computed: {
+			statusX:function(){
+				return this.username && this.password ? true : false;
+
+			}
+		},
+		watch: {
+			statusX(newVal, oldVal) {
+				if (newVal) {
+					this.btnFlag = true
+				} else {
+					this.btnFlag = false
+
+				}
 			}
 		},
 		methods: {
+
 			index: function() {
 				uni.switchTab({
 					"url": "/pages/index/index"
@@ -176,6 +207,23 @@
 					showCancel: false
 				})
 			},
+			login: function() {
+				let that = this;
+				// console.log(config)
+				uni.request({
+					url: config.url + "fs", //仅为示例，并非真实接口地址。
+					data: {
+						username: that.username,
+						password: that.password
+
+					},
+					method: 'POST',
+					success: (res) => {
+						// console.log(res.data);
+					}
+				});
+
+			}
 		}
 	}
 </script>
@@ -197,7 +245,8 @@
 		margin-left: 20upx;
 	}
 
-	.uni-list::before {
+	.uni-list::before,
+	.uni-list:after {
 		background-color: #fff;
 	}
 
@@ -213,13 +262,13 @@
 
 	.fix-con {
 		position: fixed;
-		width: 650upx;
-		height: 600upx;
+		width: 520upx;
+		height: 440upx;
 		z-index: 101;
 		left: 50%;
 		top: 50%;
-		margin-left: -325upx;
-		margin-top: -300upx;
+		margin-left: -260upx;
+		margin-top: -220upx;
 		border-radius: 10upx;
 		box-sizing: border-box;
 		padding: 20upx;
@@ -236,7 +285,7 @@
 	}
 
 	.btn-box>view {
-		padding: 2upx 60upx;
+		padding: 2upx 32upx;
 		border-radius: 10upx;
 		background-color: #007AFF;
 		color: #fff;
@@ -247,6 +296,6 @@
 	}
 
 	.item {
-		padding: 20upx 0;
+		padding: 30upx 0;
 	}
 </style>

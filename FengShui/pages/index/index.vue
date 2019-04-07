@@ -5,24 +5,6 @@
 				<view class="uni-card-header uni-card-media">
 					<image class="uni-card-media-logo" src="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png"></image>
 					<view class="uni-card-media-body">
-						<text class="uni-card-media-text-top">小U<uni-tag text="推荐" size="small" type="success" style="margin-left: 20upx;"></uni-tag></text>
-						<text class="uni-card-media-text-bottom">发表于 2018-01-30 15:30</text>
-					</view>
-				</view>
-				<view class="uni-card-content image-view">
-					<image src="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg" class="image"></image>
-				</view>
-				<view class="uni-card-footer">
-					<view class="uni-card-link">喜欢</view>
-					<view class="uni-card-link" @tap="detail">详情</view>
-				</view>
-			</view>
-		</view>
-		<view class="uni-padding-wrap uni-common-mt">
-			<view class="uni-card">
-				<view class="uni-card-header uni-card-media">
-					<image class="uni-card-media-logo" src="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png"></image>
-					<view class="uni-card-media-body">
 						<text class="uni-card-media-text-top">小U<uni-tag text="运势" size="small" type="warning" style="margin-left: 20upx;"></uni-tag></text>
 						<text class="uni-card-media-text-bottom">发表于 2018-01-30 15:30</text>
 					</view>
@@ -263,7 +245,7 @@
 				this.conFlag = true;
 				let num = parseInt(Math.random() * 100)
 				this.randNum = num;
-				console.log(num)
+				// console.log(num)
 				if (type == 0) {
 					this.color = "yellow"
 					this.cqSrc = "../../static/api.png"
@@ -350,9 +332,14 @@
 	}
 
 	.zuqian>view {
-		flex: 1;
+		-web-flex: 1;
 	}
 
+	.zuqian>view>img {
+		display: inline-block;
+		width: 160upx;
+		height: 160upx;
+	}
 
 	.zuqian>view>view {
 		text-align: center;
@@ -439,7 +426,8 @@
 		margin-top: -460upx;
 		width: 500upx;
 		height: 920upx;
-		background-color: #fff;
+		overflow-y: auto;
+		/* background-color: #fff; */
 		border-radius: 20upx;
 		box-sizing: border-box;
 		padding: 20upx;
