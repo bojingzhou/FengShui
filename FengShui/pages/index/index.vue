@@ -57,6 +57,30 @@
 				</view>
 			</view>
 		</view>
+		
+		<view class="uni-padding-wrap uni-common-mt">
+			<view class="uni-card">
+				<view class="uni-card-content image-view">
+					<image src="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg" class="image"></image>
+				</view>
+				
+				<view class="zuqian-box">
+					<view style="text-align: center;font-weight: bold;" class="flex-center">
+						<view>周公解梦</view>
+						<uni-tag text="梦" size="small" type="danger" style="margin-left: 20upx;"></uni-tag>
+					</view>
+					<view>周公解梦xx</view>
+
+				</view>
+		
+		
+				<view class="uni-card-footer">
+					<view class="uni-card-link">缘由</view>
+					<view class="uni-card-link">故事</view>
+				</view>
+			</view>
+		</view>
+		
 		<view class="uni-padding-wrap uni-common-mt">
 			<view class="uni-card">
 				<view class="uni-card-content image-view">

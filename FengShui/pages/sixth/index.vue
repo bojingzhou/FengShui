@@ -8,18 +8,15 @@
 						<view class="uni-label">用户名</view>
 					</view>
 					<view class="uni-list-cell-db">
-						<input class="uni-input" v-model="username" type="text" placeholder="请输入用户名" name="key"
-						 :value="key"></input>
+						<input class="uni-input" v-model="username" type="text" placeholder="请输入用户名" name="key" :value="key"></input>
 					</view>
-					{{username}}
 				</view>
 				<view class="uni-list-cell">
 					<view class="uni-list-cell-left">
 						<view class="uni-label">密码</view>
 					</view>
 					<view class="uni-list-cell-db">
-						<input class="uni-input" type="password"  v-model="password" placeholder="请输入密码" name="data"
-						 :value="data"></input>
+						<input class="uni-input" type="password" v-model="password" placeholder="请输入密码" name="data" :value="data"></input>
 					</view>
 				</view>
 			</view>
@@ -41,27 +38,27 @@
 			<view v-if="createFlag" style="text-align: center;font-weight: bold;">创建账户</view>
 			<view class="item flex-center" v-if="createFlag">
 				<uni-tag size="small" text="账户" type="success"></uni-tag>
-				<input type="text" placeholder="输入您的账户名" style="margin-left: 30upx;">
+				<input type="text" placeholder="输入您的账户名" style="margin-left: 30upx;" v-model="accountName">
 
 			</view>
 			<view class="item flex-center" v-if="createFlag">
 
 				<uni-tag size="small" text="密码" type="warning"></uni-tag>
-				<input type="text" placeholder="输入您的密码" style="margin-left: 30upx;">
+				<input type="text" placeholder="输入您的密码" style="margin-left: 30upx;" v-model="accountPassword">
 			</view>
 			<view class="item flex-center" v-if="createFlag">
 
 				<uni-tag size="small" text="邮箱" type="primary"></uni-tag>
-				<input type="text" placeholder="输入您的邮箱" style="margin-left: 30upx;">
+				<input type="text" placeholder="输入您的邮箱" style="margin-left: 30upx;" v-model="accountEmail">
 			</view>
 			<view v-if="forgetFlag" style="text-align: center;font-weight: bold;">忘记密码</view>
 
 			<view class="item flex-center" v-if="forgetFlag">
 				<uni-tag size="small" text="邮箱" type="danger"></uni-tag>
-				<input type="text" placeholder="输入您的邮箱" style="margin-left: 30upx;">
+				<input type="text" placeholder="输入您的邮箱" style="margin-left: 30upx;" v-model="forgetEmail">
 			</view>
 
-			<view class="flex-center btn-box">
+			<view class="flex-center btn-box" v-if="fixBtn">
 				<view @tap="hide">取消</view>
 				<view>提交</view>
 			</view>
@@ -87,16 +84,26 @@
 				username: "",
 				password: "",
 				btnFlag: false,
-				status: false
+				status: false,
+				accountName: "",
+				accountPassword: "",
+				accountEmail: "",
+				forgetEmail: "",
+				fixBtn: false
 			}
 		},
 		onShow() {
 
 		},
 		computed: {
-			statusX:function(){
+			statusX: function() {
 				return this.username && this.password ? true : false;
-
+			},
+			create: function() {
+				return this.accountName && this.accountPassword && this.accountEmail ? true : false;
+			},
+			forget: function() {
+				return this.forgetEmail ? true : false;
 			}
 		},
 		watch: {
@@ -105,9 +112,23 @@
 					this.btnFlag = true
 				} else {
 					this.btnFlag = false
-
 				}
-			}
+			},
+			create(newVal, oldVal) {
+				if (newVal) {
+					this.fixBtn = true
+				} else {
+					this.fixBtn = false
+				}
+			},
+			forget(newVal, oldVal) {
+				if (newVal) {
+					this.fixBtn = true
+				} else {
+					this.fixBtn = false
+				}
+			},
+
 		},
 		methods: {
 
@@ -120,13 +141,17 @@
 				this.hideFlag = false;
 			},
 			show: function(type) {
+				this.fixBtn = false;
 				if (type == 0) {
+					this.accountName = ""
+					this.accountPassword = ""
+					this.accountEmail = ""
 					this.createFlag = true;
 					this.forgetFlag = false;
 
 				} else {
+					this.forgetEmail = ""
 					this.createFlag = false;
-
 					this.forgetFlag = true;
 
 				}
@@ -296,6 +321,6 @@
 	}
 
 	.item {
-		padding: 30upx 0;
+		padding: 18upx 0;
 	}
 </style>

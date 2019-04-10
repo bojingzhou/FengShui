@@ -19,3 +19,6 @@
 	flex-direction: column;
 	align-items: center;
 }
+uni-tabbar, uni-tabbar .uni-tabbar{
+	z-index: 10001;
+}
