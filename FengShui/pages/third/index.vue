@@ -2,9 +2,9 @@
 	<view class="page">
 		<view class="uni-card">
 			<view class="uni-card-header flex-left">
-				<view>{{nickname}}</view>
+				<view>{{key}}</view>
 				<view style="margin-left: 20upx;">
-					<uni-badge text="level 1" type="warning"></uni-badge>
+					<uni-badge :text=level type="warning"></uni-badge>
 				</view>
 			</view>
 			<view class="uni-card-content">
@@ -55,7 +55,7 @@
 		},
 		data() {
 			return {
-				nickname: 'xx',
+				nickname: '',
 				title: 'cardview',
 				list: [{
 						"title": "我的运势",
@@ -86,7 +86,8 @@
 						"type": "danger"
 					}
 				],
-				key: "usrname"
+				key: "username",
+				level: "0"
 			}
 		},
 		methods: {
@@ -94,6 +95,7 @@
 				// console.log(num);
 			},
 			getStorage: function() {
+				let that = this;
 				var key = this.key;
 				uni.getStorage({
 					key: key,
@@ -103,11 +105,14 @@
 								url: '/pages/sixth/index'
 							});
 						}
+						let data = JSON.parse(res.data)
+						that.key = data.username
+						that.level = "等级"+data.level
 					},
-					fail: () => {
-						uni.navigateTo({
-							url: '/pages/sixth/index'
-						});
+					fail: (err) => {
+// 						uni.navigateTo({
+// 							url: '/pages/sixth/index'
+// 						});
 					}
 				})
 			}

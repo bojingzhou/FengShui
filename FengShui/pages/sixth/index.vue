@@ -29,7 +29,7 @@
 			</view>
 			<view class="uni-padding-wrap" v-if="btnFlag">
 				<view class="uni-btn-v">
-					<button type="primary" class="btn-setstorage" @tap="login">登陆</button>
+					<button type="primary" class="btn-setstorage" @tap="login('login')">登陆</button>
 				</view>
 			</view>
 		</view>
@@ -60,7 +60,7 @@
 
 			<view class="flex-center btn-box" v-if="fixBtn">
 				<view @tap="hide">取消</view>
-				<view>提交</view>
+				<view @tap="submit">提交</view>
 			</view>
 		</view>
 	</view>
@@ -70,8 +70,7 @@
 	import config from '@/common/config.js'
 	export default {
 		components: {
-			uniTag,
-			// uniBadge
+			uniTag
 		},
 		data() {
 			return {
@@ -203,23 +202,7 @@
 						showCancel: false
 					})
 				} else {
-					uni.setStorage({
-						key: key,
-						data: data,
-						success: (res) => {
-							uni.showModal({
-								title: '存储数据成功',
-								content: ' ',
-								showCancel: false
-							})
-						},
-						fail: () => {
-							uni.showModal({
-								title: '储存数据失败!',
-								showCancel: false
-							})
-						}
-					})
+
 				}
 			},
 			clearStorage: function() {
@@ -232,21 +215,94 @@
 					showCancel: false
 				})
 			},
-			login: function() {
+			login: function(type) {
 				let that = this;
-				// console.log(config)
-				uni.request({
-					url: config.url + "fs", //仅为示例，并非真实接口地址。
-					data: {
+				let url = ""
+				let data = ""
+				if (type == "login") {
+					url = config.url + "login"
+					data = {
 						username: that.username,
 						password: that.password
-
-					},
+					}
+				} else {
+					url = config.url + "forget"
+					data = {
+						email: that.forgetEmail
+					}
+				}
+				uni.request({
+					url: url,
+					data: data,
 					method: 'POST',
 					success: (res) => {
-						// console.log(res.data);
-					}
+						if (res.data.status == 200) {
+							if (res.data.data) {
+								let data = res.data.data;
+								if (type == "login") {
+									that.set("username", JSON.stringify(data).toString(), function() {
+										uni.switchTab({
+											url: '/pages/third/index'
+										});
+									})
+								} else {
+									uni.showToast({
+										title: "稍后将会发送到您的邮箱",
+										duration: 2000,
+										complete: function() {
+											that.hide();
+										}
+									});
+								}
+
+							}
+						}
+					},
+					fail: () => {},
+					complete: () => {}
 				});
+			},
+			set: function(key, data, cb) {
+				uni.setStorage({
+					key: key,
+					data: data,
+					success: (res) => {
+						if (cb) {
+							cb();
+						}
+					},
+					fail: () => {
+
+					}
+				})
+			},
+			submit: function() {
+				let that = this;
+				if (this.createFlag) {
+					uni.request({
+						url: config.url + "add", //仅为示例，并非真实接口地址。
+						data: {
+							username: that.accountName,
+							password: that.accountPassword,
+							email: that.accountEmail
+
+						},
+						method: 'POST',
+						success: (res) => {
+							uni.showToast({
+								title: res.data.data,
+								duration: 2000,
+								complete: function() {
+									that.hide();
+								}
+							});
+						},
+						fail: () => {},
+						complete: () => {}
+					});
+				} else {
+					that.login("forget")
+				}
 
 			}
 		}

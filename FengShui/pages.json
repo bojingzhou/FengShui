@@ -41,6 +41,12 @@
 			"style": {
 				"navigationBarTitleText": "交流"
 			}
+		},
+		{
+			"path": "pages/eighth/index",
+			"style": {
+				"navigationBarTitleText": "小助手"
+			}
 		}
 	],
 	"globalStyle": {
@@ -66,12 +72,12 @@
 				"selectedIconPath": "static/apiHL.png",
 				"text": "许愿墙"
 			},
-// 			{
-// 				"pagePath": "pages/seventh/index",
-// 				"iconPath": "static/template.png",
-// 				"selectedIconPath": "static/templateHL.png",
-// 				"text": "交流"
-// 			},
+			{
+				"pagePath": "pages/eighth/index",
+				"iconPath": "static/template.png",
+				"selectedIconPath": "static/templateHL.png",
+				"text": "小助手"
+			},
 			{
 				"pagePath": "pages/third/index",
 				"iconPath": "static/template.png",
