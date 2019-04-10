@@ -28,11 +28,11 @@
 					</view>
 				</view>
 				<view class="uni-textarea">
-					<textarea placeholder="请输入祈愿内容" />
+					<textarea placeholder="请输入祈愿内容" v-model="con" />
 					</view>
 				<view class="uni-card-footer">
 					<view class="uni-card-link">清空</view>
-					<view class="uni-card-link">提交</view>
+					<view class="uni-card-link" @tap="submit">提交</view>
 				</view>
 			</view>
 		</view>
@@ -41,15 +41,19 @@
 
 <script>
 	import uniTag from '@/components/uni-tag.vue'
+	import config from '@/common/config.js'
+
 	export default {
 		components: {
 			uniTag
 		},
 		data() {
 			return {
+				num:"财神灯",
+				con:"",
 				showClearIcon: false,
 				inputClearValue: '',
-				deng:['光明灯', '财神灯', '健康灯', '平安灯', '求子灯', '事业灯', '桃花灯', '文殊灯', '幸福灯', '月老灯', '转运灯', '追忆灯'],
+				deng:[ '财神灯', '事业灯', '桃花灯', '文殊灯', '幸福灯', '月老灯'],
 				selectDeng:""
 			}
 		},
@@ -57,14 +61,9 @@
 			actionSheetTap() {
 				let that=this;
 				uni.showActionSheet({
-					itemList: ['光明灯', '财神灯', '健康灯', '平安灯', '求子灯', '事业灯', '桃花灯', '文殊灯', '幸福灯', '月老灯', '转运灯', '追忆灯'],
+					itemList: ['财神灯', '健康灯','事业灯', '桃花灯', '文殊灯', '月老灯'],
 					success: (e) => {
-						that.selectDeng=that.deng[e.tapIndex]
-// 						console.log(e.tapIndex);
-// 						uni.showToast({
-// 							title: "点击了第" + e.tapIndex + "个选项",
-// 							icon: "none"
-// 						})
+						that.num=that.deng[e.tapIndex]
 					}
 				})
 			},
@@ -80,6 +79,34 @@
 					this.showClearIcon = false;
 				}
 			},
+			submit:function(){
+				let that = this;
+				
+					uni.request({
+						url: config.url + "addPromise", //仅为示例，并非真实接口地址。
+						data: {
+							num: that.num,
+							title: that.inputClearValue,
+							con: that.con
+				
+						},
+						method: 'POST',
+						success: (res) => {
+							uni.showToast({
+								title: res.data.data,
+								duration: 2000,
+								complete: function() {
+									uni.switchTab({
+										"url": "/pages/second/index"
+									})
+								}
+							});
+						},
+						fail: () => {},
+						complete: () => {}
+					});
+				
+			}
 		}
 	}
 </script>

@@ -6,7 +6,7 @@
 			<view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(value,key) in list" :key="key">
 				<view class="uni-list-cell-navigate uni-navigate-right uni-media-list ">
 					<view class="uni-media-list-logo">
-						<image v-if="showImg" :src="value.img"></image>
+						<image :src="value.img"></image>
 					</view>
 					<view class="uni-media-list-body">
 						<view class="uni-media-list-text-top flex-between">
@@ -16,12 +16,12 @@
 								<!-- <uni-tag text="赞" type="warning" size="small" style="margin-left: 10upx;"></uni-tag> -->
 							</view>
 							<view style="margin-right: 30upx;">
-								<uni-badge v-bind:text="value.num" v-bind:type="key%2==0?'success':'danger'"></uni-badge>
+								<uni-badge v-bind:text="value.zan" v-bind:type="key%2==0?'success':'danger'"></uni-badge>
 
 							</view>
 
 						</view>
-						<view class="uni-media-list-text-bottom uni-ellipsis">{{value.content}}</view>
+						<view class="uni-media-list-text-bottom uni-ellipsis">{{value.con}}</view>
 					</view>
 				</view>
 			</view>
@@ -45,6 +45,7 @@
 	</view>
 </template>
 <script>
+	import config from '@/common/config.js'
 	import uniBadge from "@/components/uni-badge.vue";
 	import uniTag from '@/components/uni-tag.vue'
 	export default {
@@ -54,34 +55,18 @@
 		},
 		data() {
 			return {
+				number: 0,
 				title: 'media-list',
 				showImg: false,
 				btnFlag: false,
 				completeFlag: false,
 				num: "10s",
+				arr: [],
 				list: [{
 						title: "木屋",
 						content: "想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖。",
 						num: "10",
 						img: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/muwu.jpg?imageView2/3/w/200/h/100/q/90"
-					},
-					{
-						num: "10",
-						title: "CBD",
-						content: "烤炉模式的城，到黄昏，如同打翻的调色盘一般。",
-						img: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg?imageView2/3/w/200/h/100/q/90"
-					},
-					{
-						num: "10",
-						title: "CBD",
-						content: "烤炉模式的城，到黄昏，如同打翻的调色盘一般。",
-						img: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg?imageView2/3/w/200/h/100/q/90"
-					},
-					{
-						num: "10",
-						title: "CBD",
-						content: "烤炉模式的城，到黄昏，如同打翻的调色盘一般。",
-						img: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg?imageView2/3/w/200/h/100/q/90"
 					},
 					{
 						num: "10",
@@ -131,10 +116,11 @@
 		},
 		methods: {
 			btnTap: function(type) {
-				if (type == 0) {} else if (type == 1) {
-					uni.navigateTo({
-						url: 'pages/fourth/index'
-					});
+				if (type == 0) {
+					this.number = 0
+					this.promiseList(0, "normal")
+				} else if (type == 1) {
+					this.promiseList(0, "love")
 				} else if (type == 2) {
 					uni.navigateTo({
 						url: '/pages/fourth/index'
@@ -157,14 +143,37 @@
 						that.completeFlag = false;
 					}
 				}, 1000)
+			},
+			promiseList: function(number, type) {
+				let that = this;
+				uni.request({
+					url: config.url + "promiseList", //仅为示例，并非真实接口地址。
+					data: {
+						num: number,
+						type: type
+					},
+					method: 'POST',
+					success: (res) => {
+						if (type == "normal") {
+							for (let i = 0; i < res.data.data.length; i++) {
+								that.arr.push(res.data.data[i])
+							}
+							that.list = that.arr
+						} else {
+							that.list = res.data.data
+						}
+					},
+					fail: () => {},
+					complete: () => {
 
-
+					}
+				});
 			}
 		},
 		onLoad() {
-			setTimeout(() => {
-				this.showImg = true;
-			}, 400)
+			// 			setTimeout(() => {
+			// 				this.showImg = true;
+			// 			}, 400)
 		},
 		onReachBottom() {
 			if (!this.completeFlag) {
@@ -172,10 +181,12 @@
 				this.btnFlag = true;
 				this.btnShow();
 			}
+			this.number += 1;
+			this.promiseList(this.number, "normal")
 
 		},
 		onShow() {
-
+			this.promiseList(this.number, "normal");
 			// this.startjiasu();
 			// this.jianting();
 		},

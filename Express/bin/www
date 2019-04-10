@@ -46,21 +46,6 @@ var server = http.createServer(app);
  */
 
 server.listen(port);
-var io = require('socket.io')(server);
-io.sockets.on('connection', function (socket) {
-    socket.on('login', function (data) {
-        // console.log(data);
-        let result = JSON.parse(data);
-        io.sockets.emit("tip", JSON.stringify(result))
-    });
-    socket.on('disconnect', function (socket) {
-        console.log("hide")
-    });
-    socket.on('send', function (data) {
-        let result = JSON.parse(data);
-        io.sockets.emit("msg", JSON.stringify(result))
-    });
-});
 
 /**
  * Normalize a port into a number, string, or false.

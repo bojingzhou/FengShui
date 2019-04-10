@@ -51,7 +51,6 @@
 		components: {
 			uniBadge,
 			uniTag
-
 		},
 		data() {
 			return {
